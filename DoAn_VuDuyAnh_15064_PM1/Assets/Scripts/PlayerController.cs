@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5;
+    public float moveSpeed = 6;
     public float leftRightSpeed;
 
     Vector3 jump;
@@ -11,10 +11,14 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded;
 
     Rigidbody rb;
+    public GameObject gameOverText;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         jump = new Vector3(0.0f, 2.0f, 0.0f);
+        gameOverText.SetActive(false);
+        FindObjectOfType<GameManager>().showGamePanel(false);
     }
     private void OnCollisionStay(Collision collision)
     {
@@ -51,7 +55,9 @@ public class PlayerController : MonoBehaviour
         //Restart
         if (rb.position.y < -1f)
         {
-            FindObjectOfType<GameManager>().EndGame();
+            gameOverText.SetActive(true);       
+            this.gameObject.SetActive(false);
+            FindObjectOfType<GameManager>().showGamePanel(true);
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -62,10 +68,21 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(timeSpeed());
             other.gameObject.SetActive(false);
         }
+        if (other.gameObject.tag == "Tree")
+        {
+            moveSpeed = 2;
+            StartCoroutine(timeSpeed());
+        }
+        if (other.gameObject.tag == "Rock")
+        {
+            gameOverText.SetActive(true);
+            this.gameObject.SetActive(false);
+            FindObjectOfType<GameManager>().showGamePanel(true);         
+        }
     }
     IEnumerator timeSpeed()
     {
-        yield return new WaitForSeconds(0.6f);
-        moveSpeed = 5;
+        yield return new WaitForSeconds(0.8f);
+        moveSpeed = 8;
     }
 }

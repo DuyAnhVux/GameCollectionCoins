@@ -4,35 +4,33 @@ using UnityEngine.UI;
 public class Score : MonoBehaviour
 {
     public Text scoreText;
-    private int count;
-    public GameObject winTextObject;
+    public Text score;
+    private int countCoins;
+    private int sumScore;
     void Start()
     {
-        count = 0;
+        countCoins = 0;
+        sumScore = 0;
         setCountText();
-        winTextObject.SetActive(false);
+        FindObjectOfType<GameManager>().showGamePanel(false);
     }
     void setCountText()
     {
-        scoreText.text = "Count: " + count.ToString();
-        if(count >= 30)
-        {
-            winTextObject.SetActive(true);
-        }
+        scoreText.text = "Coins: " + countCoins.ToString();   
+    }
+    void setScore()
+    {
+        score.text = "Score: " + sumScore.ToString();
     }
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Coin")
         {
             other.gameObject.SetActive(false);
-            count = count + 4;
+            countCoins = countCoins +1;
+            sumScore = sumScore + 5;
             setCountText();
-        }
-        if (other.gameObject.tag == "Rock")
-        {
-            other.gameObject.SetActive(false);
-            count = count - 6;
-            setCountText();
-        }
+            setScore();
+        }     
     }
 }

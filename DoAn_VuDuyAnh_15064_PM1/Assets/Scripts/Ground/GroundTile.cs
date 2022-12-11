@@ -1,11 +1,6 @@
 using UnityEngine;
-
 public class GroundTile : MonoBehaviour
 {
-    //Obstacle
-    [SerializeField] GameObject[] ObstaclePrefabs;
-    public Transform[] SpawnObstaclePos;
-
     //Enemy
     public GameObject enemy;
     public Transform[] SpawnEnemyPos;
@@ -17,7 +12,6 @@ public class GroundTile : MonoBehaviour
     [SerializeField] GameObject coinSpeedPrefabs;
     void Start()
     {
-        SpawnObstacles();
         SpawnCoins();
         SpawnCoinSpeed();
     }
@@ -31,18 +25,10 @@ public class GroundTile : MonoBehaviour
         {
             int index = Random.Range(0, 3);
             GameObject ob = Instantiate(enemy, SpawnEnemyPos[index]);
-            Destroy(ob, 220f);
+            Destroy(ob, 200f);
             time = 0;
         }
         time = time + Time.deltaTime;
-    }
-    public void SpawnObstacles()
-    {
-        int index = Random.Range(0, 2);
-        int ObstacleSpawnPosition = Random.Range(1, 7);
-
-        Transform SpawnPoint = transform.GetChild(ObstacleSpawnPosition).transform;
-        Instantiate(ObstaclePrefabs[index], SpawnPoint.position, Quaternion.identity, transform);
     }
     Vector3 GetRandomCoin(Collider collider)
     {
